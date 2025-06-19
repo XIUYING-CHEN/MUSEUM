@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=0.5"/>
+  <title>佛山科学馆虚拟导览 | Foshan Science Museum Virtual Tour</title>
+  <style>
+    /* Base styles (mobile first) */
+    :root {
+      --primary-color: #005b96;
+      --secondary-color: #333;
+      --text-color: #333;
+      --light-text: #666;
+      --background: white;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--text-color);
+      -webkit-text-size-adjust: 100%;
+      line-height: 1.5;
+    }
+
+    /* Header styles */
+    .header-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: var(--background);
+      color: var(--text-color);
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 10;
+    }
+
+    .logo {
+      height: 50px;
+      margin-bottom: 10px;
+      width: auto;
+    }
+
+    .header-text {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .chinese-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: var(--primary-color);
+    }
+
+    .english-title {
+      font-size: 1rem;
+      color: var(--light-text);
+      display: none;
+    }
+
+    .language-switcher {
+      margin: 10px 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .language-switcher a {
+      color: var(--primary-color);
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: bold;
+      font-size: 1rem;
+      padding: 8px 15px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .language-switcher a.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    /* Hero section */
+    .virtual-tour-header {
+      position: relative;
+      text-align: center;
+      width: 100%;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .virtual-tour-header img {
+      width: 100%;
+      height: auto;
+      max-height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .virtual-tour-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+      width: 100%;
+      padding: 0 15px;
+    }
+
+    .virtual-tour-text h1 {
+      font-size: 1.8rem;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    /* Content sections */
+    .intro {
+      padding: 20px 15px;
+      width: 100%;
+      margin: 0 auto;
+      background-color: var(--background);
+      text-align: center;
+    }
+
+    .intro h2 {
+      font-size: 1.4rem;
+      margin: 10px 0 15px;
+      color: var(--primary-color);
+    }
+
+    .intro p {
+      font-size: 1rem;
+      text-align: left;
+      padding: 0 5px;
+      color: var(--text-color);
+    }
+
+    .tour-container {
+      width: 100%;
+      margin: 20px auto;
+      padding: 0 15px;
+      background-color: var(--background);
+    }
+
+    .tour-embed {
+      width: 100%;
+      height: 300px;
+      background-color: var(--background);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .tour-instruction {
+      text-align: center;
+      margin: 15px 0;
+      font-style: normal;
+      color: var(--light-text);
+      font-size: 0.95rem;
+    }
+
+    .museum-info {
+      width: 100%;
+      margin: 25px auto;
+      padding: 0 15px;
+      background-color: var(--background);
+    }
+
+    .info-section {
+      margin-bottom: 25px;
+    }
+
+    .info-section h2 {
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      color: var(--primary-color);
+      padding-bottom: 5px;
+      border-bottom: 2px solid var(--primary-color);
+    }
+
+    .info-section p {
+      font-size: 1rem;
+      margin-bottom: 12px;
+      text-align: justify;
+    }
+
+    .info-section strong {
+      color: var(--primary-color);
+    }
+
+    .map-container {
+      width: 100%;
+      height: 250px;
+      margin: 15px 0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .map-container iframe {
+      border: none;
+    }
+
+    .qr-code {
+      text-align: center;
+      margin: 25px 0;
+    }
+
+    .qr-code img {
+      width: 180px;
+      height: auto;
+      border: 1px solid #ddd;
+      padding: 10px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 15px;
+      background-color: var(--background);
+      font-size: 0.9rem;
+      border-top: 1px solid #eee;
+      margin-top: 20px;
+    }
+
+    footer p {
+      margin: 5px 0;
+      color: var(--light-text);
+    }
+
+    /* Language toggle styles */
+    body.chinese .english,
+    body.english .chinese {
+      display: none;
+    }
+
+    body.english .english-title {
+      display: block;
+    }
+
+    /* Tablet styles (600px and up) */
+    @media (min-width: 600px) {
+      .virtual-tour-header img {
+        max-height: 300px;
+      }
+      
+      .virtual-tour-text h1 {
+        font-size: 2.2rem;
+      }
+      
+      .tour-embed {
+        height: 400px;
+      }
+      
+      .map-container {
+        height: 350px;
+      }
+      
+      .intro, 
+      .museum-info {
+        padding: 20px 30px;
+      }
+    }
+
+    /* Desktop styles (900px and up) */
+    @media (min-width: 900px) {
+      .header-container {
+        flex-direction: row;
+        padding: 15px 30px;
+        text-align: left;
+        align-items: center;
+      }
+      
+      .logo {
+        height: 60px;
+        margin-right: 25px;
+        margin-bottom: 0;
+      }
+      
+      .header-text {
+        flex: 1;
+        text-align: left;
+        margin-bottom: 0;
+      }
+      
+      .chinese-title {
+        font-size: 1.8rem;
+      }
+      
+      .english-title {
+        font-size: 1.2rem;
+      }
+      
+      .language-switcher {
+        margin-left: 25px;
+        margin-top: 0;
+      }
+      
+      .virtual-tour-header img {
+        max-height: 400px;
+      }
+      
+      .virtual-tour-text h1 {
+        font-size: 3rem;
+      }
+      
+      .intro {
+        max-width: 1000px;
+        padding: 30px 40px;
+      }
+      
+      .intro h2 {
+        font-size: 1.8rem;
+      }
+      
+      .tour-container {
+        max-width: 900px;
+      }
+      
+      .tour-embed {
+        height: 500px;
+      }
+      
+      .museum-info {
+        max-width: 1000px;
+        padding: 0 40px;
+      }
+      
+      .info-section h2 {
+        font-size: 1.6rem;
+      }
+      
+      .map-container {
+        height: 400px;
+      }
+      
+      .qr-code img {
+        width: 220px;
+      }
+    }
+
+    /* Large desktop screens (1200px and up) */
+    @media (min-width: 1200px) {
+      .intro,
+      .museum-info {
+        max-width: 1100px;
+      }
+      
+      .tour-container {
+        max-width: 1000px;
+      }
+    }
+  </style>
+</head>
+<body class="chinese">
+  <div class="header-container">
+    <img src="C:\Users\Adeline\Desktop\佛山科学馆7楼气象馆\photo\museum information\original logo.png" alt="佛山科学馆标志" class="logo">
+    <div class="header-text">
+      <div class="chinese-title">佛山科学馆</div>
+      <div class="english-title">FOSHAN SCIENCE MUSEUM</div>
+    </div>
+    <div class="language-switcher">
+      <a href="#" class="active" onclick="setLanguage('chinese')">中文</a>
+      <a href="#" onclick="setLanguage('english')">English</a>
+    </div>
+  </div>
+
+  <div class="virtual-tour-header">
+    <img src="C:\Users\Adeline\Desktop\佛山科学馆7楼气象馆\photo\museum information\背景.jpg" alt="天气博物馆">
+    <div class="virtual-tour-text">
+      <h1 class="chinese">3D虚拟导览</h1>
+      <h1 class="english">3D Virtual Tour</h1>
+    </div>
+  </div>
+
+  <section class="intro">
+    <h2 class="chinese">欢迎来到佛山科学馆 - 气象展览厅</h2>
+    <h2 class="english">Welcome to the Foshan Science Museum - Meteorological Exhibition Hall</h2>
+    <p class="chinese">
+      本虚拟导览让您随时随地探索佛山科学馆气象展览厅。通过3D场景导航，与展品互动。
+    </p>
+    <p class="english">
+      This virtual tour allows you to explore the Meteorological Exhibition Hall from anywhere. 
+      Navigate through 3D scenes and interact with exhibits.
+    </p>
+  </section>
+
+  <section class="tour-container">
+    <div class="tour-embed">
+      <iframe width="100%" height="500" frameborder="0" allow="xr-spatial-tracking; gyroscope; accelerometer"
+       allowfullscreen scrolling="no" src="https://kuula.co/share/collection/71Y82?logo=0&info=0&fs=1&vr=1&sd=1&initload=0&thumbs=1"></iframe>
+    </div>
+    <p class="tour-instruction chinese">请点击图像开始虚拟导览</p>
+    <p class="tour-instruction english">Please click to start your virtual tour</p>
+  </section>
+
+  <section class="museum-info">
+    <div class="info-section">
+      <h2 class="chinese">佛山科学馆入馆参观温馨提示</h2>
+      <h2 class="english">Tips for visiting Foshan Science Museum</h2>
+      <p class="chinese">
+        佛山科学馆作为提高全民科学素质的科普教育基地，长期免费开放。自2023年10月29日起，游客可免预约入馆参观。衷心感谢您对我们工作的理解与支持！
+      </p>
+      <p class="chinese">
+        当馆内游客达到限流峰值（3000人）时，将采取临时管控措施，馆外游客暂时不能进馆，待馆内游客出馆后，未能进馆的游客可按批次排队进馆参观，我馆将在馆门口屏幕及微信公众号上公布实时在馆人数，方便市民游客及时了解情况。
+      </p>
+      <p class="english">
+        As a popular science education base to improve the scientific literacy of the whole people, Foshan Science Museum is open to the public free of charge for a long time. From October 29, 2023, visitors can visit the museum without an appointment. Thank you for your understanding and support of our work!
+      </p>
+      <p class="english">
+        When the number of visitors in the museum reaches the peak (3,000 people), temporary control measures will be taken, and visitors outside the museum will not be allowed to enter the museum temporarily. After the visitors in the museum leave the museum, those who have not entered the museum can queue up to enter the museum for a visit. The museum will announce the information in real time on the screen at the entrance of the museum and on the WeChat public account, so that citizens and tourists can understand the situation in time.
+      </p>
+    </div>
+
+    <div class="info-section">
+      <h2 class="chinese">参观信息</h2>
+      <h2 class="english">About</h2>
+      
+      <p class="chinese"><strong>1. 开放时间：</strong>星期三至星期日上午9:00-12：00，下午14：00-17：00，寒暑假及节假日开放时间另行通知。</p>
+      <p class="english"><strong>1. Opening hours:</strong> Wednesday to Sunday 9:00-12:00 am, 14:00-17:00 pm, opening hours during winter and summer vacations and holidays will be notified separately.</p>
+      
+      <p class="chinese"><strong>2. 地址：</strong>广东省佛山市顺德区乐从镇佛山新城华康道3号。</p>
+      <p class="english"><strong>2. Address:</strong> No. 3 Huakang Road, Foshan New Town, Lecong Town, Shunde, Foshan, Guangdong Province.</p>
+      
+      <div class="map-container">
+        <iframe src="https://map.baidu.com/@12592925.899999473,2612004.900991206,17z/latlng%3D22.973650463453%252C113.12294719286%26title%3D%25E4%25BD%259B%25E5%25B1%25B1%25E7%25A7%2591%25E5%25AD%25A6%25E9%25A6%2586%26content%3D%25E5%25B9%25BF%25E4%25B8%259C%25E7%259C%2581%25E4%25BD%259B%25E5%25B1%25B1%25E5%25B8%2582%25E9%25A1%25BA%25E5%25BE%25B7%25E5%258C%25BA%25E4%25B9%2590%25E4%25BB%258E%25E9%2595%2587%25E5%258D%258E%25E5%25BA%25B7%25E9%2581%25933%25E5%258F%25B7%26autoOpen%3Dtrue"></iframe>
+      </div>
+      
+      <p class="chinese"><strong>3. 建议：</strong>节假日客流、车流较大，馆区停车位有限，倡导绿色公共交通出行。建议游客搭乘地铁广佛线（至世纪莲地铁站A出口）或者公交车（至世纪莲体育中心西门公交站）后，步行5-10分钟到达佛山科学馆。</p>
+      <p class="english"><strong>3. Suggestion:</strong> There are large passenger and vehicle flows during holidays, and parking spaces in the museum are limited. Green public transportation is advocated. It is recommended that tourists take the subway Guangfo Line (to Century Lotus Subway Station Exit A) or the bus (to Century Lotus Sports Center West Gate) bus stop) and walk 5-10 minutes to Foshan Science Museum.</p>
+      
+      <p class="chinese"><strong>4. 咨询电话：</strong>0757-29398876。</p>
+      <p class="english"><strong>4. Consultation phone number:</strong> 0757-29398876.</p>
+    </div>
+
+    <div class="info-section">
+      <p class="chinese">相关信息变动更新，请关注"佛山科学馆"微信公众号。</p>
+      <p class="english">For relevant information changes and updates, please follow the "Foshan Science Museum" WeChat public account.</p>
+      <div class="qr-code">
+        <img src="C:\Users\Adeline\Desktop\佛山科学馆7楼气象馆\photo\museum information\qr code.gif"alt="微信公众号二维码">
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p class="chinese">&copy; 2025 佛山科学馆 | 虚拟导览 陈秀荧</p>
+    <p class="english">&copy; 2025 Foshan Science Museum | Virtual Tour by Chen XiuYing</p>
+  </footer>
+
+  <script>
+    function setLanguage(lang) {
+      document.body.className = lang;
+      
+      // Update active language button
+      document.querySelectorAll('.language-switcher a').forEach(link => {
+        link.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Prevent default link behavior
+      event.preventDefault();
+    }
+    
+    // Detect if the device is mobile
+    function isMobileDevice() {
+      return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+    }
+    
+    // Optional: You can use this to make specific adjustments if needed
+    if (isMobileDevice()) {
+      document.body.classList.add('mobile');
+    } else {
+      document.body.classList.add('desktop');
+    }
+  </script>
+</body>
+</html>
